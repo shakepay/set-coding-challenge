@@ -36,6 +36,7 @@
 // And the todo item is moved to the Completed list (verify)
 
 import { test, expect } from '@playwright/test';
+import { createNewTodoItem } from '../utils/todoUtils';
 
 const APP_URL = 'https://todomvc.com/examples/react/dist/'; // can be stored in ENV variables 
 
@@ -46,41 +47,50 @@ test.describe('Todomvc app 6 tests', () => {
     await page.goto(APP_URL);
     console.log('Successfully navigated to the TodoMVC app URL');
   });
-  
-// Test case #1: Create new todo item
-test('Create a new todo item and check if it appears last in the list', async ({ page }) => {
-  console.log('Starting test: Create a new todo item...');
 
-});
+  // Test case #1: Create new todo item
+  test('Create a new todo item and check if it appears last in the list', async ({ page }) => {
+    console.log('Starting test: Create a new todo item...');
+    const todoText = 'Alex`s first todo item';
 
-// Test case #2: Edit a todo item
-test('Edit a todo item and ensure it gets updated', async ({ page }) => {
-  console.log('Starting test: Edit a todo item...');
+    // ACT --- Using the util function to create-a-new-todo-item
+    await createNewTodoItem(page, todoText)
 
-});
+    // VERIFY --- Then it appears last on my todo list
+    const lastTodoItem = await page.locator('.todo-list li').last();
 
-// Test case #3: Delete a todo item using the red X
-test('Delete a todo item using the red X and ensure it is removed from the list', async ({ page }) => {
-  console.log('Starting test: Delete a todo item using the red X...');
+    await expect(lastTodoItem).toHaveText(todoText);
+    console.log('Last To Do is: '+ todoText);
+  });
 
-});
+  // Test case #2: Edit a todo item
+  test('Edit a todo item and ensure it gets updated', async ({ page }) => {
+    console.log('Starting test: Edit a todo item...');
 
-// Test case #4: Mark a todo item as completed
-test('Mark a todo item as completed and verify it is crossed off', async ({ page }) => {
-  console.log('Starting test: Mark a todo item as completed...');
+  });
 
-});
+  // Test case #3: Delete a todo item using the red X
+  test('Delete a todo item using the red X and ensure it is removed from the list', async ({ page }) => {
+    console.log('Starting test: Delete a todo item using the red X...');
 
-// Test case #5: View only Active (Not Completed) todo items  
-test('View only Active todo items when the Active filter is selected', async ({ page }) => {
-  console.log('Starting test: View only Active todo items...');
+  });
 
-});
+  // Test case #4: Mark a todo item as completed
+  test('Mark a todo item as completed and verify it is crossed off', async ({ page }) => {
+    console.log('Starting test: Mark a todo item as completed...');
 
-// Test case #6: Clear Completed todo items
-test('Clear completed todo items and verify they are removed', async ({ page }) => {
-  console.log('Starting test: Clear completed todo items...');
+  });
 
-});
+  // Test case #5: View only Active (Not Completed) todo items  
+  test('View only Active todo items when the Active filter is selected', async ({ page }) => {
+    console.log('Starting test: View only Active todo items...');
+
+  });
+
+  // Test case #6: Clear Completed todo items
+  test('Clear completed todo items and verify they are removed', async ({ page }) => {
+    console.log('Starting test: Clear completed todo items...');
+
+  });
 });
 
