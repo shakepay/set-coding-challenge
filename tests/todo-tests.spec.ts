@@ -36,7 +36,7 @@
 // And the todo item is moved to the Completed list (verify)
 
 import { test, expect } from '@playwright/test';
-import { createNewTodoItem } from '../utils/todoUtils';
+import { createNewTodoItem, markTodoItemAsCompleted } from '../utils/todoUtils';
 
 const APP_URL = 'https://todomvc.com/examples/react/dist/'; // can be stored in ENV variables 
 
@@ -139,16 +139,14 @@ test.describe('Todomvc app 6 tests', () => {
     await createNewTodoItem(page, todoText);
     await createNewTodoItem(page, todoText2);
     const todoItemLocator = page.locator('.todo-list li');
-    // Verify that 2 items been created
+    // ASSERT --- that 2 items been created
     await expect(todoItemLocator).toHaveCount(2);
 
-    // ACT --- mark second item as a completed
-    const secondTodoCheckbox = todoItemLocator.nth(1).locator('input.toggle');
-    await secondTodoCheckbox.click();
+    // ACT --- mark second item as a completed using util function
+    await markTodoItemAsCompleted(page, 1);
 
     // ASSERT --- the second item has the 'completed' class
     await expect(todoItemLocator.nth(1)).toHaveClass(/completed/);
-
 
     // ACT --- Click the "Active" filter
     const activeFilter = page.locator('a[href="#/active"]');
