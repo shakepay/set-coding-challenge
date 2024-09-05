@@ -174,6 +174,10 @@ test.describe('Run Todomvc app 6 tests', () => {
     const todoItemLocator = page.locator('.todo-list li');
     await expect(todoItemLocator).toHaveCount(1);
     await expect(todoItemLocator.first()).toContainText(TODO_ITEMS['first']);
+
+    //Taking a screenshot after that flow is completed
+    await page.screenshot({ path: `screenshots/deleted-todo-${Date.now()}.png` });
+
   });
 });
 
