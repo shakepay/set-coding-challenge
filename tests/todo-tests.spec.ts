@@ -36,7 +36,7 @@
 // And the todo item is moved to the Completed list (verify)
 
 import { test, expect } from '@playwright/test';
-import { createNewTodoItem, markTodoItemAsCompleted } from '../utils/todoUtils';
+import { clearCompletedTodos, createNewTodoItem, deleteTodoItem, filterActiveTodos, markTodoItemAsCompleted } from '../utils/todoUtils';
 //import { checkNumberOfCompletedTodosInLocalStorage, checkNumberOfTodosInLocalStorage } from '../src/todo-app';
 
 const APP_URL = 'https://todomvc.com/examples/react/dist/'; // can be stored in ENV variables 
@@ -59,7 +59,7 @@ test.describe('Run Todomvc app 6 tests', () => {
   // Test case #1: Create new todo item
   test('Create a new todo item and check if it appears last in the list', async ({ page }) => {
     console.log('Starting test: Create a new todo item...');
-   
+
 
     // ACT --- Using the util function to create-a-new-todo-item
     await createNewTodoItem(page, TODO_ITEMS['first'])
@@ -102,9 +102,7 @@ test.describe('Run Todomvc app 6 tests', () => {
     await todoItem.hover();
 
     // ACT --- Deleting the todo item
-    const deleteButton = todoItem.locator('button.destroy'); // Locate the delete button (red X)
-    await deleteButton.hover();
-    await deleteButton.click();
+    await deleteTodoItem(page, 0);
 
     // ASSERT --- Verifying the todo item is removed from the list
     await expect(todoItem).toHaveCount(0);
@@ -152,8 +150,7 @@ test.describe('Run Todomvc app 6 tests', () => {
     await expect(todoItemLocator.nth(1)).toHaveClass(/completed/);
 
     // ACT --- Click the "Active" filter
-    const activeFilter = page.locator('a[href="#/active"]');
-    await activeFilter.click();
+    await filterActiveTodos(page);
 
     // ASSERT --- that only the active (not completed) todo item is shown
     const activeTodoItemLocator = page.locator('.todo-list li');
@@ -175,8 +172,7 @@ test.describe('Run Todomvc app 6 tests', () => {
     await markTodoItemAsCompleted(page, 1);
 
     // ACT --- Click on "Clear completed" button
-    const clearCompletedButton = page.locator('button.clear-completed');
-    await clearCompletedButton.click();
+    await clearCompletedTodos(page);
 
     //ASSERT --- That completed item has been removed from the list
     const todoItemLocator = page.locator('.todo-list li');
