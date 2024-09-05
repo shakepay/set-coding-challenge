@@ -132,12 +132,14 @@ test.describe('Run Todomvc app 6 tests', () => {
   test('View only Active todo items when the Active filter is selected', async ({ page }) => {
     console.log('Starting test: View only Active todo items...');
 
-    const todoText = 'First active todo';
-    const todoText2 = 'Second completed todo';
+    const TODO_ITEMS = [
+      'First active todo',
+      'Second completed todo'
+    ];
 
     // ACT --- Using the util function to create-a-new-todo-item * 2
-    await createNewTodoItem(page, todoText);
-    await createNewTodoItem(page, todoText2);
+    await createNewTodoItem(page, TODO_ITEMS[0]);
+    await createNewTodoItem(page, TODO_ITEMS[1]);
     const todoItemLocator = page.locator('.todo-list li');
     // ASSERT --- that 2 items been created
     await expect(todoItemLocator).toHaveCount(2);
@@ -155,7 +157,7 @@ test.describe('Run Todomvc app 6 tests', () => {
     // ASSERT --- that only the active (not completed) todo item is shown
     const activeTodoItemLocator = page.locator('.todo-list li');
     await expect(activeTodoItemLocator).toHaveCount(1); // Only one active todo item should be visible
-    await expect(activeTodoItemLocator.first()).toContainText(todoText);
+    await expect(activeTodoItemLocator.first()).toContainText(TODO_ITEMS[0]);
     console.log('Verified only the active todo item is displayed');
   });
 
@@ -164,11 +166,13 @@ test.describe('Run Todomvc app 6 tests', () => {
     console.log('Starting test: Clear completed todo items...');
 
     // ACT --- Using the util function to create-a-new-todo-item *2
-    const todoText = 'First active todo';
-    const todoText2 = 'Second completed todo';
+    const TODO_ITEMS = [
+      'First active todo',
+      'Second completed todo'
+    ];
 
-    await createNewTodoItem(page, todoText);
-    await createNewTodoItem(page, todoText2);
+    await createNewTodoItem(page, TODO_ITEMS[0]);
+    await createNewTodoItem(page, TODO_ITEMS[1]);
 
     // ACT --- Mark the second item as completed
     await markTodoItemAsCompleted(page, 1);
@@ -180,7 +184,7 @@ test.describe('Run Todomvc app 6 tests', () => {
     //ASSERT --- That completed item has been removed from the list
     const todoItemLocator = page.locator('.todo-list li');
     await expect(todoItemLocator).toHaveCount(1);
-    await expect(todoItemLocator.first()).toContainText(todoText);
+    await expect(todoItemLocator.first()).toContainText(TODO_ITEMS[0]);
   });
 });
 
