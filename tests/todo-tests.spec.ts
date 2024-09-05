@@ -43,6 +43,13 @@ const APP_URL = 'https://todomvc.com/examples/react/dist/'; // can be stored in 
 
 test.describe('Run Todomvc app 6 tests', () => {
 
+  const TODO_ITEMS = {
+    first: 'First active todo',
+    second: 'Second completed todo',
+    updated: 'Updated todo item'
+  };
+
+
   test.beforeEach(async ({ page }) => {
     // Navigate to the todomvc app before each test
     await page.goto(APP_URL);
@@ -52,26 +59,24 @@ test.describe('Run Todomvc app 6 tests', () => {
   // Test case #1: Create new todo item
   test('Create a new todo item and check if it appears last in the list', async ({ page }) => {
     console.log('Starting test: Create a new todo item...');
-    const todoText = 'Alex`s first todo item';
+   
 
     // ACT --- Using the util function to create-a-new-todo-item
-    await createNewTodoItem(page, todoText)
+    await createNewTodoItem(page, TODO_ITEMS['first'])
 
     // ASSERT --- Then it appears last on my todo list
     const lastTodoItem = await page.locator('.todo-list li').last();
 
-    await expect(lastTodoItem).toHaveText(todoText);
-    console.log('Last To Do is: ' + todoText);
+    await expect(lastTodoItem).toHaveText(TODO_ITEMS['first']);
+    console.log('Last To Do is: ' + TODO_ITEMS['first']);
   });
 
   // Test case #2: Edit a todo item
   test('Edit a todo item and ensure it gets updated', async ({ page }) => {
     console.log('Starting test: Edit a todo item...');
-    const todoText = 'First todo item';
-    const updatedTodoText = 'Updated todo item';
 
     // ACT --- Using the util function to create-a-new-todo-item
-    await createNewTodoItem(page, todoText)
+    await createNewTodoItem(page, TODO_ITEMS['first'])
 
     // ACT --- Edit todo item
     const todoItem = await page.locator('.todo-list li').first();
@@ -79,21 +84,20 @@ test.describe('Run Todomvc app 6 tests', () => {
 
     // ACT --- Update text to the new one
     const editInput = todoItem.locator('input[type="text"]');
-    await editInput.fill(updatedTodoText);
+    await editInput.fill(TODO_ITEMS['second']);
     await editInput.press('Enter');
 
     // ASSERT --- Then the todo item gets updated with the new changes
-    await expect(todoItem).toHaveText(updatedTodoText);
+    await expect(todoItem).toHaveText(TODO_ITEMS['second']);
 
   });
 
   // Test case #3: Delete a todo item using the red X
   test('Delete a todo item using the red X and ensure it is removed from the list', async ({ page }) => {
     console.log('Starting test: Delete a todo item using the red X...');
-    const todoText = 'First todo item';
 
     // ACT --- Using the util function to create-a-new-todo-item
-    await createNewTodoItem(page, todoText)
+    await createNewTodoItem(page, TODO_ITEMS['first'])
     const todoItem = page.locator('.todo-list li').first();
     await todoItem.hover();
 
@@ -110,10 +114,9 @@ test.describe('Run Todomvc app 6 tests', () => {
   // Test case #4: Mark a todo item as completed
   test('Mark a todo item as completed and verify it is crossed off', async ({ page }) => {
     console.log('Starting test: Mark a todo item as completed...');
-    const todoText = 'Todo to be completed';
 
     // ACT --- Using the util function to create-a-new-todo-item
-    await createNewTodoItem(page, todoText);
+    await createNewTodoItem(page, TODO_ITEMS['first']);
 
     //ACT --- Mark to do
     const todoItemLocator = page.locator('.todo-list li');
@@ -133,14 +136,9 @@ test.describe('Run Todomvc app 6 tests', () => {
   test('View only Active todo items when the Active filter is selected', async ({ page }) => {
     console.log('Starting test: View only Active todo items...');
 
-    const TODO_ITEMS = [
-      'First active todo',
-      'Second completed todo'
-    ];
-
     // ACT --- Using the util function to create-a-new-todo-item * 2
-    await createNewTodoItem(page, TODO_ITEMS[0]);
-    await createNewTodoItem(page, TODO_ITEMS[1]);
+    await createNewTodoItem(page, TODO_ITEMS['first']);
+    await createNewTodoItem(page, TODO_ITEMS['second']);
     //await checkNumberOfTodosInLocalStorage(page, 2);
     const todoItemLocator = page.locator('.todo-list li');
 
@@ -160,7 +158,7 @@ test.describe('Run Todomvc app 6 tests', () => {
     // ASSERT --- that only the active (not completed) todo item is shown
     const activeTodoItemLocator = page.locator('.todo-list li');
     await expect(activeTodoItemLocator).toHaveCount(1); // Only one active todo item should be visible
-    await expect(activeTodoItemLocator.first()).toContainText(TODO_ITEMS[0]);
+    await expect(activeTodoItemLocator.first()).toContainText(TODO_ITEMS['first']);
     console.log('Verified only the active todo item is displayed');
   });
 
@@ -169,13 +167,8 @@ test.describe('Run Todomvc app 6 tests', () => {
     console.log('Starting test: Clear completed todo items...');
 
     // ACT --- Using the util function to create-a-new-todo-item *2
-    const TODO_ITEMS = [
-      'First active todo',
-      'Second completed todo'
-    ];
-
-    await createNewTodoItem(page, TODO_ITEMS[0]);
-    await createNewTodoItem(page, TODO_ITEMS[1]);
+    await createNewTodoItem(page, TODO_ITEMS['first']);
+    await createNewTodoItem(page, TODO_ITEMS['second']);
     //await checkNumberOfTodosInLocalStorage(page, 2);
 
     // ACT --- Mark the second item as completed
@@ -188,7 +181,7 @@ test.describe('Run Todomvc app 6 tests', () => {
     //ASSERT --- That completed item has been removed from the list
     const todoItemLocator = page.locator('.todo-list li');
     await expect(todoItemLocator).toHaveCount(1);
-    await expect(todoItemLocator.first()).toContainText(TODO_ITEMS[0]);
+    await expect(todoItemLocator.first()).toContainText(TODO_ITEMS['first']);
   });
 });
 
