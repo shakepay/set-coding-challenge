@@ -10,12 +10,28 @@ export async function createNewTodoItem(page: Page, todoText: string) {
 export async function markTodoItemAsCompleted(page: Page, index: number) {
     const todoItemLocator = page.locator('.todo-list li');
     const toggleCheckbox = todoItemLocator.nth(index).locator('input.toggle');
-    
+
     // Click the checkbox to mark the todo item as completed
     await toggleCheckbox.click();
-  
+
     // Verify that the item is marked as completed
     await expect(todoItemLocator.nth(index)).toHaveClass(/completed/);
-  
+
     console.log(`Marked todo item at index ${index} as completed.`);
-  }
+}
+// Clear completed todos by click on a clear action button
+export async function clearCompletedTodos(page: Page) {
+    const clearCompletedButton = page.locator('button.clear-completed');
+    await clearCompletedButton.click();
+}
+// Filter only active todos by clicking Active button
+export async function filterActiveTodos(page: Page) {
+    const activeFilter = page.locator('a[href="#/active"]');
+    await activeFilter.click();
+}
+
+// Filter only completed todos by clicking Completed button
+export async function filterCompletedTodos(page: Page) {
+    const completedFilter = page.locator('a[href="#/completed"]');
+    await completedFilter.click();
+}

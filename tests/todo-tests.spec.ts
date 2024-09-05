@@ -37,7 +37,7 @@
 
 import { test, expect } from '@playwright/test';
 import { createNewTodoItem, markTodoItemAsCompleted } from '../utils/todoUtils';
-import { checkNumberOfCompletedTodosInLocalStorage, checkNumberOfTodosInLocalStorage } from '../src/todo-app';
+//import { checkNumberOfCompletedTodosInLocalStorage, checkNumberOfTodosInLocalStorage } from '../src/todo-app';
 
 const APP_URL = 'https://todomvc.com/examples/react/dist/'; // can be stored in ENV variables 
 
