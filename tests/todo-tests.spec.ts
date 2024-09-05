@@ -76,10 +76,14 @@ test.describe('Todomvc app 6 tests', () => {
     const todoItem = await page.locator('.todo-list li').first();
     await todoItem.dblclick();
 
-    // update text to the new one
+    // Update text to the new one
+    const editInput = todoItem.locator('input[type="text"]');
+    await editInput.fill(updatedTodoText);
+    await editInput.press('Enter');
 
     // VERIFY --- Then the todo item gets updated with the new changes
     await expect(todoItem).toHaveText(updatedTodoText);
+
   });
 
   // Test case #3: Delete a todo item using the red X
