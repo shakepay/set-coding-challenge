@@ -76,7 +76,7 @@ test.describe('Todomvc app 6 tests', () => {
     const todoItem = await page.locator('.todo-list li').first();
     await todoItem.dblclick();
 
-    // Update text to the new one
+    // ACT --- Update text to the new one
     const editInput = todoItem.locator('input[type="text"]');
     await editInput.fill(updatedTodoText);
     await editInput.press('Enter');
@@ -120,11 +120,11 @@ test.describe('Todomvc app 6 tests', () => {
     await todoCheckbox.click();
     console.log('Marked the todo item as completed');
 
-    //ASSERT --- Verify the item has the 'completed' class (indicating strikethrough)
-     await expect(todoItemLocator.first()).toHaveClass(/completed/);
- 
-     //ASSERT --- Verify the checkbox is checked
-     await expect(todoCheckbox).toBeChecked();
+    //ASSERT --- Verify that item has the 'completed' class = strikethrough
+    await expect(todoItemLocator.first()).toHaveClass(/completed/);
+
+    //ASSERT --- Verify that the checkbox is checked
+    await expect(todoCheckbox).toBeChecked();
 
   });
 
@@ -132,6 +132,33 @@ test.describe('Todomvc app 6 tests', () => {
   test('View only Active todo items when the Active filter is selected', async ({ page }) => {
     console.log('Starting test: View only Active todo items...');
 
+    const todoText = 'First active todo';
+    const todoText2 = 'Second completed todo';
+
+    // ACT --- Using the util function to create-a-new-todo-item * 2
+    await createNewTodoItem(page, todoText);
+    await createNewTodoItem(page, todoText2);
+    const todoItemLocator = page.locator('.todo-list li');
+    // Verify that 2 items been created
+    await expect(todoItemLocator).toHaveCount(2);
+
+    // ACT --- mark second item as a completed
+    const secondTodoCheckbox = todoItemLocator.nth(1).locator('input.toggle');
+    await secondTodoCheckbox.click();
+
+    // ASSERT --- the second item has the 'completed' class
+    await expect(todoItemLocator.nth(1)).toHaveClass(/completed/);
+
+
+    // ACT --- Click the "Active" filter
+    const activeFilter = page.locator('a[href="#/active"]');
+    await activeFilter.click();
+
+    // ASSERT --- that only the active (not completed) todo item is shown
+    const activeTodoItemLocator = page.locator('.todo-list li');
+    await expect(activeTodoItemLocator).toHaveCount(1); // Only one active todo item should be visible
+    await expect(activeTodoItemLocator.first()).toContainText(todoText);
+    console.log('Verified only the active todo item is displayed');
   });
 
   // Test case #6: Clear Completed todo items
