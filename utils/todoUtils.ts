@@ -35,3 +35,17 @@ export async function filterCompletedTodos(page: Page) {
     const completedFilter = page.locator('a[href="#/completed"]');
     await completedFilter.click();
 }
+
+export async function deleteTodoItem(page: Page, index: number) {
+    // Locate the todo item by index
+    const todoItem = page.locator('.todo-list li').nth(index);
+    
+    // Hover over the todo item 
+    await todoItem.hover();
+
+    // Locate the delete button (red X) and click on
+    const deleteButton = todoItem.locator('button.destroy');
+    await deleteButton.hover();
+    await deleteButton.click();
+
+}
