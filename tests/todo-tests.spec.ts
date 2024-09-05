@@ -37,6 +37,7 @@
 
 import { test, expect } from '@playwright/test';
 import { createNewTodoItem, markTodoItemAsCompleted } from '../utils/todoUtils';
+import { checkNumberOfCompletedTodosInLocalStorage, checkNumberOfTodosInLocalStorage } from '../src/todo-app';
 
 const APP_URL = 'https://todomvc.com/examples/react/dist/'; // can be stored in ENV variables 
 
@@ -140,7 +141,9 @@ test.describe('Run Todomvc app 6 tests', () => {
     // ACT --- Using the util function to create-a-new-todo-item * 2
     await createNewTodoItem(page, TODO_ITEMS[0]);
     await createNewTodoItem(page, TODO_ITEMS[1]);
+    //await checkNumberOfTodosInLocalStorage(page, 2);
     const todoItemLocator = page.locator('.todo-list li');
+
     // ASSERT --- that 2 items been created
     await expect(todoItemLocator).toHaveCount(2);
 
@@ -173,6 +176,7 @@ test.describe('Run Todomvc app 6 tests', () => {
 
     await createNewTodoItem(page, TODO_ITEMS[0]);
     await createNewTodoItem(page, TODO_ITEMS[1]);
+    //await checkNumberOfTodosInLocalStorage(page, 2);
 
     // ACT --- Mark the second item as completed
     await markTodoItemAsCompleted(page, 1);
