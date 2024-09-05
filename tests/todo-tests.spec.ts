@@ -49,7 +49,6 @@ test.describe('Run Todomvc app 6 tests', () => {
     updated: 'Updated todo item'
   };
 
-
   test.beforeEach(async ({ page }) => {
     // Navigate to the todomvc app before each test
     await page.goto(APP_URL);
@@ -59,7 +58,6 @@ test.describe('Run Todomvc app 6 tests', () => {
   // Test case #1: Create new todo item
   test('Create a new todo item and check if it appears last in the list', async ({ page }) => {
     console.log('Starting test: Create a new todo item...');
-
 
     // ACT --- Using the util function to create-a-new-todo-item
     await createNewTodoItem(page, TODO_ITEMS['first'])
@@ -89,7 +87,6 @@ test.describe('Run Todomvc app 6 tests', () => {
 
     // ASSERT --- Then the todo item gets updated with the new changes
     await expect(todoItem).toHaveText(TODO_ITEMS['second']);
-
   });
 
   // Test case #3: Delete a todo item using the red X
@@ -127,7 +124,6 @@ test.describe('Run Todomvc app 6 tests', () => {
 
     //ASSERT --- Verify that the checkbox is checked
     await expect(todoCheckbox).toBeChecked();
-
   });
 
   // Test case #5: View only Active (Not Completed) todo items  
