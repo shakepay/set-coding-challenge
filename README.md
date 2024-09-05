@@ -1,3 +1,10 @@
+### How to check my tests?
+1. CO to my branch or merge my fork
+2. Tests located main/tests
+3. Util functions /utils/todoUtils.ts
+4. Run tests: `npx playwright test --headed todo-tests.spec.ts` or `npx playwright test --ui todo-tests.spec.ts` for logs and visability
+5. Changed playwright.config.ts - to run on chromium only
+
 ### How do I get set up?
 
 1. **Fork this repository** before continuing.
