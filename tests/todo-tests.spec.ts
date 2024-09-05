@@ -109,6 +109,22 @@ test.describe('Todomvc app 6 tests', () => {
   // Test case #4: Mark a todo item as completed
   test('Mark a todo item as completed and verify it is crossed off', async ({ page }) => {
     console.log('Starting test: Mark a todo item as completed...');
+    const todoText = 'Todo to be completed';
+
+    // ACT --- Using the util function to create-a-new-todo-item
+    await createNewTodoItem(page, todoText);
+
+    //ACT --- Mark to do
+    const todoItemLocator = page.locator('.todo-list li');
+    const todoCheckbox = todoItemLocator.first().locator('input.toggle');
+    await todoCheckbox.click();
+    console.log('Marked the todo item as completed');
+
+    //ASSERT --- Verify the item has the 'completed' class (indicating strikethrough)
+     await expect(todoItemLocator.first()).toHaveClass(/completed/);
+ 
+     //ASSERT --- Verify the checkbox is checked
+     await expect(todoCheckbox).toBeChecked();
 
   });
 
