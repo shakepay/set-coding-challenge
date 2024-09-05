@@ -56,7 +56,7 @@ test.describe('Todomvc app 6 tests', () => {
     // ACT --- Using the util function to create-a-new-todo-item
     await createNewTodoItem(page, todoText)
 
-    // VERIFY --- Then it appears last on my todo list
+    // ASSERT --- Then it appears last on my todo list
     const lastTodoItem = await page.locator('.todo-list li').last();
 
     await expect(lastTodoItem).toHaveText(todoText);
@@ -81,7 +81,7 @@ test.describe('Todomvc app 6 tests', () => {
     await editInput.fill(updatedTodoText);
     await editInput.press('Enter');
 
-    // VERIFY --- Then the todo item gets updated with the new changes
+    // ASSERT --- Then the todo item gets updated with the new changes
     await expect(todoItem).toHaveText(updatedTodoText);
 
   });
@@ -89,7 +89,21 @@ test.describe('Todomvc app 6 tests', () => {
   // Test case #3: Delete a todo item using the red X
   test('Delete a todo item using the red X and ensure it is removed from the list', async ({ page }) => {
     console.log('Starting test: Delete a todo item using the red X...');
+    const todoText = 'First todo item';
 
+    // ACT --- Using the util function to create-a-new-todo-item
+    await createNewTodoItem(page, todoText)
+    const todoItem = page.locator('.todo-list li').first();
+    await todoItem.hover();
+
+    // ACT --- Deleting the todo item
+    const deleteButton = todoItem.locator('button.destroy'); // Locate the delete button (red X)
+    await deleteButton.hover();
+    await deleteButton.click();
+
+    // ASSERT --- Verifying the todo item is removed from the list
+    await expect(todoItem).toHaveCount(0);
+    console.log('Todo item successfully deleted');
   });
 
   // Test case #4: Mark a todo item as completed
