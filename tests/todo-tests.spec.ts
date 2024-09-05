@@ -40,7 +40,7 @@ import { createNewTodoItem, markTodoItemAsCompleted } from '../utils/todoUtils';
 
 const APP_URL = 'https://todomvc.com/examples/react/dist/'; // can be stored in ENV variables 
 
-test.describe('Todomvc app 6 tests', () => {
+test.describe('Run Todomvc app 6 tests', () => {
 
   test.beforeEach(async ({ page }) => {
     // Navigate to the todomvc app before each test
@@ -163,6 +163,24 @@ test.describe('Todomvc app 6 tests', () => {
   test('Clear completed todo items and verify they are removed', async ({ page }) => {
     console.log('Starting test: Clear completed todo items...');
 
+    // ACT --- Using the util function to create-a-new-todo-item *2
+    const todoText = 'First active todo';
+    const todoText2 = 'Second completed todo';
+
+    await createNewTodoItem(page, todoText);
+    await createNewTodoItem(page, todoText2);
+
+    // ACT --- Mark the second item as completed
+    await markTodoItemAsCompleted(page, 1);
+
+    // ACT --- Click on "Clear completed" button
+    const clearCompletedButton = page.locator('button.clear-completed');
+    await clearCompletedButton.click();
+
+    //ASSERT --- That completed item has been removed from the list
+    const todoItemLocator = page.locator('.todo-list li');
+    await expect(todoItemLocator).toHaveCount(1);
+    await expect(todoItemLocator.first()).toContainText(todoText);
   });
 });
 
