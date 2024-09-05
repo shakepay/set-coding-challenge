@@ -60,13 +60,26 @@ test.describe('Todomvc app 6 tests', () => {
     const lastTodoItem = await page.locator('.todo-list li').last();
 
     await expect(lastTodoItem).toHaveText(todoText);
-    console.log('Last To Do is: '+ todoText);
+    console.log('Last To Do is: ' + todoText);
   });
 
   // Test case #2: Edit a todo item
   test('Edit a todo item and ensure it gets updated', async ({ page }) => {
     console.log('Starting test: Edit a todo item...');
+    const todoText = 'First todo item';
+    const updatedTodoText = 'Updated todo item';
 
+    // ACT --- Using the util function to create-a-new-todo-item
+    await createNewTodoItem(page, todoText)
+
+    // ACT --- Edit todo item
+    const todoItem = await page.locator('.todo-list li').first();
+    await todoItem.dblclick();
+
+    // update text to the new one
+
+    // VERIFY --- Then the todo item gets updated with the new changes
+    await expect(todoItem).toHaveText(updatedTodoText);
   });
 
   // Test case #3: Delete a todo item using the red X
