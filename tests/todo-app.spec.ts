@@ -54,13 +54,16 @@ test.describe("Edit Existing Todo", () => {
   }) => {
     // Create a new todo locator
     const newTodo = page.getByPlaceholder("What needs to be done?");
+
     // Create 1st todo.
     await newTodo.fill(TODO_ITEMS[1]);
     await newTodo.press("Enter");
+
     // Edit 1st todo.
     await page.getByTestId("todo-title").dblclick();
     await page.getByLabel("Edit").fill("new item updated");
     await page.getByLabel("Edit").press("Enter");
+
     // Make sure the list now shows the updated text.
     await expect(page.getByTestId("todo-title")).toContainText(
       "new item updated",
@@ -78,13 +81,17 @@ test.describe("Delete Existing Todo Using Red X", () => {
   }) => {
     // Create a new todo locator
     const newTodo = page.getByPlaceholder("What needs to be done?");
+
     // Create 1st todo.
     await newTodo.fill(TODO_ITEMS[1]);
     await newTodo.press("Enter");
+
     // Click the first todo.
     await page.getByTestId("todo-title").click();
+
     // Click delete button.
     await page.getByLabel("Delete").click();
+
     // Make sure the list is now empty.
     await expect(page.getByPlaceholder("What needs to be done?")).toBeEmpty();
   });
@@ -101,19 +108,24 @@ test.describe("Mark Todo Complete", () => {
   }) => {
     // Create a new todo locator
     const newTodo = page.getByPlaceholder("What needs to be done?");
+
     // Create 1st todo.
     await newTodo.fill(TODO_ITEMS[1]);
     await newTodo.press("Enter");
+
     // Check 1st todo.
     await page.getByLabel("Toggle Todo").check();
+
     // Verify 1st todo is checked
     await expect(page.getByLabel("Toggle Todo")).toBeChecked();
+
     // Verify 1st todo has strikethrough
     // Get the computed style of the element
     const element = await page.getByTestId("todo-title"); // Replace with the actual selector
     const textDecoration = await element.evaluate((el) => {
       return window.getComputedStyle(el).getPropertyValue("text-decoration");
     });
+
     // Assert that the text has strikethrough (line-through)
     expect(textDecoration).toContain("line-through");
   });
@@ -129,9 +141,11 @@ test.describe("Marked Todo Items DO NOT Show As Active", () => {
   }) => {
     // Create a new todo locator
     const newTodo = page.getByPlaceholder("What needs to be done?");
+
     // Create 1st todo.
     await newTodo.fill(TODO_ITEMS[0]);
     await newTodo.press("Enter");
+
     // Create 2st todo.
     await newTodo.fill(TODO_ITEMS[1]);
     await newTodo.press("Enter");
@@ -152,20 +166,27 @@ test.describe("Clear Complete Button", () => {
   }) => {
     // Create a new todo locator
     const newTodo = page.getByPlaceholder("What needs to be done?");
+
     // Create 1st todo.
     await newTodo.fill(TODO_ITEMS[0]);
     await newTodo.press("Enter");
+
     // Create 2st todo.
     await newTodo.fill(TODO_ITEMS[1]);
     await newTodo.press("Enter");
+
     // Check complete first todo.
     await page.getByLabel("Toggle Todo").first().check();
+
     // Clear complete.
     await page.getByRole("button", { name: "Clear completed" }).click();
+
     // Verify only 2nd todo is visible
     await expect(page.getByTestId("todo-title")).toContainText(TODO_ITEMS[1]);
+
     // Check the Completed List
     await page.getByRole("link", { name: "Completed" }).click();
+
     // Verify the 1st todo is visible in the completed list
     await expect(page.getByTestId("todo-title")).toContainText(TODO_ITEMS[0]);
   });
