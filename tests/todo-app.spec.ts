@@ -10,6 +10,10 @@ const TODO_ITEMS = [
   'ensure coverage for all items is automated'
 ];
 
+// Test case #1
+// Given I am a user of todomvc
+// When I create a new todo item
+// Then it appears last on my todo list
 test.describe('Create New Todo', () => {
   test('should be able to create new items on the page', async ({ page }) => {
     // create a new todo locator
@@ -38,6 +42,10 @@ test.describe('Create New Todo', () => {
   });
 });
 
+// Test case #2
+// Given I have created a todo item
+// When I edit a todo item
+// Then the todo item gets updated with the new changes
 test.describe('Edit Existing Todo', () => {
   test('should be able to edit existing items on the page', async ({ page }) => {
     // Create a new todo locator
@@ -53,7 +61,6 @@ test.describe('Edit Existing Todo', () => {
     await expect(page.getByTestId('todo-title')).toContainText('new item updated');
   });
 });
-
 
 // Test case #3
 // Given I have created a todo item
@@ -74,7 +81,6 @@ test.describe('Delete Existing Todo Using Red X', () => {
     await expect(page.getByPlaceholder('What needs to be done?')).toBeEmpty();
   });
 });
-
 
 // Test case #4
 // Given I have created a todo item
