@@ -54,3 +54,7 @@ Thumbs.db
 # VS Code
 *.code-workspace
 .vscode/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
